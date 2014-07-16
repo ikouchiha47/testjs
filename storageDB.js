@@ -134,7 +134,7 @@ var lSql = (function() {
 			res,
 			type,
 			temp,
-                        len;
+                        length;
 			if(localStorage.getItem(name)) {
 				res = localStorage.getItem(name);
 				type = typeofData(res);
