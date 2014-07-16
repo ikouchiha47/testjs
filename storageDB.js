@@ -133,7 +133,8 @@ var lSql = (function() {
 			var cl = classOf(values),
 			res,
 			type,
-			temp;
+			temp,
+                        len;
 			if(localStorage.getItem(name)) {
 				res = localStorage.getItem(name);
 				type = typeofData(res);
@@ -141,8 +142,9 @@ var lSql = (function() {
 					temp = JSON.parse(res);
 				}
 				if(type.data && type.data == "Array") {
-					if(values.length && values.length > 0 && values.constructor.name != "String") {
-						for(var i in values) {
+                                        length = values.length;
+					if(length && length > 0 && values.constructor.name != "String") {
+						for(var i = 0; i < len;  i +=1) {
 							temp.push(values[i]);
 						}
 					} else {
