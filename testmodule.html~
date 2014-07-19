@@ -1,0 +1,44 @@
+<html>
+<head>
+<script type = "text/javascript" src = "modloader.js"></script>
+</head>
+<body>
+V1 : <input type = "text" id = "val1"/>
+v2 : <input type = "text" id = "val2"/>
+<input type = "text" readonly id = "output"/>
+<br/>
+
+<div id ="options">
+	<input type = "button" value = "add"/>
+	<input type = "button" value = "substract"/>
+</div>
+
+<script type = "text/javascript">
+modules(["js/util", "js/add", "js/subs"]).exec(function() {
+		
+		var v1 = $("#val1").value,
+		v2 = $("#val2").value,
+		v3 = $("#output").innerHTML,
+		op = $("#options"),
+		operand,
+		obj;
+		console.log("in callback");
+		op.addEventListener("click", function(e) {
+			if(e && e.target) {
+			console.log(e);
+			operand = e.target.value;
+			console.log(operand);
+			obj = this[operand];
+			console.log(typeof op);
+			console.log(this["add"]);
+			console.log(op.toString());
+			v3 = obj.apply(obj,[v1,v2]);
+			}
+			}, false);
+		});
+
+</script>
+<br/>
+<span></span>
+</body>
+</html>
