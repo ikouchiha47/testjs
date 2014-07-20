@@ -94,6 +94,23 @@ var modules = (function(files) {
 					this.load(dep, callback);
 				}
 			}
+<<<<<<< HEAD
+=======
+			for(var dep in scripts) {
+				console.log(scripts[dep].state);//all states are false;
+				if(scripts[dep].state) {
+					count ++;
+				}
+			}
+			console.log(curCount);//count is 0;
+			console.log(count);
+//at this stage, i would check if the state were true, and if they were i would call the callback, but .. :'( , the count and curCount is 0, 
+//although this is obvious because the curCount increases after the event, and the function executes before that
+			if(count >= len && count == curCount){
+				callback && callback();
+			}
+			
+>>>>>>> origin/master
 		}
 	};
 });
