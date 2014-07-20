@@ -1,13 +1,13 @@
 var modules = (function(files) {
 	var scripts = {},
 		len = files.length,
-		body = document.getElementsByTagName('body')[0],
+		body = document.querySelector('body'),
 		curCount = 0;
 
 	if(len) {
 		each(files, function(file) {
 			if(scripts[file] === undefined) {
-				scripts[file] = {state : false};
+				scripts[file] = {name : file, state : false};
 			}
 		
 		});
@@ -30,10 +30,23 @@ var modules = (function(files) {
 		return dom;
 	}
 
-	function onScriptLoad(e) {
+	function countScripts(obj) {
+		var count = 0;
+		for(var i in obj) {
+			count ++;
+		}
+		return count;
 	}
 
-	function loadScript (ctx, node) {
+	function onScriptLoad(ctx, count, cb) {
+		var cs = countScripts(scripts);
+		ctx.state = true;
+		if(count == cs) {
+			cb && cb();
+		}
+	}
+
+	function loadScript (ctx, node, callback) {
 		if(node.readyState) {
 			node.onreadystatechange = function() {
 				if (node.readyState == 'complete' ||
@@ -44,18 +57,15 @@ var modules = (function(files) {
 			};
 		} else {
 			node.onload = function () {
-				ctx.state = true;
-				curCount++;//executes , but it doesnot change the global curCount and hence, outside here, is always 0;
+				curCount++;
+				onScriptLoad(ctx, curCount, callback);
 			}
 			node.onerror = function() {
 				ctx.sate = false;
-				console.log("bye bye");
+				console.log("error loading " + ctx.name);
 			}
 		}
-
 		body.appendChild(node);
-		//ctx.state = true;
-		return ctx.state;
 	}
 
 
@@ -71,32 +81,19 @@ var modules = (function(files) {
 	}
 
 	return {
-		load : function(name) {
+		load : function(name, cb) {
 			node = createScript(name);
-			return loadScript(scripts[name], node);
+			return loadScript(scripts[name], node, cb);
 		},
 
 		exec : function (callback) {
 			var count = 0;
 			for(var dep in scripts) {
-				console.log(dep);
+				//console.log(dep);
 				if(dep) {
-					var res = this.load(dep);
-					console.log(res);
+					this.load(dep, callback);
 				}
 			}
-			for(var dep in scripts) {
-				console.log(scripts[dep].state);//all states are false;
-				if(scripts[dep].state) {
-					count ++;
-				}
-			}
-			console.log(curCount);//count is 0;
-			console.log(count);
-			if(count >= len && count == curCount){
-				callback && callback();
-			}
-			//at this stage, i would check if the state were true, and if they were i would call the callback, but .. :'(
 		}
 	};
 });

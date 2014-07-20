@@ -7,7 +7,7 @@ function add (a,b) {
 	
 	for(var i = 0; i < len; i ++) {
 		if (arguments[i] === Number) {
-			s += arguments[i];
+			s += (+arguments[i]);
 		}
 	}
 	/*
@@ -27,7 +27,7 @@ function multiply (a,b) {
 	
 	for(var i = 0; i < len; i ++) {
 		if (arguments[i] === Number) {
-			s *= arguments[i];
+			s *= (+arguments[i]);
 		}
 	}
 	/*
